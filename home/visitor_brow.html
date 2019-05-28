@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>走访录入</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link href="../css/mui.picker.all.css" rel="stylesheet" />
+		<link href="../css/viewImg.css" rel="stylesheet" />
+		<link href="../css/mui.mask.css" rel="stylesheet" />
+		<style>
+			html,body,.mui-content{background-color: white;}
+			.mui-icon.mui-icon-plusempty{font-size: 17px;}
+			.mui-icon-plusempty:before {content: '\e468';font-size: 530%;font-weight:bold;color: #12B6F6;}
+			input::-webkit-input-placeholder{text-align: right;}
+			input{font-size: 14px;color: #8f8f94;}
+			!* .mui-table-view:before{height: 0px;}*!
+			.mui-table-view:after{height: 0px;}
+			.mui-table-view-chevron .mui-table-view-cell {padding-right: 20px;}
+			.myBtn{border: 1px solid #CCCCCC;width: 92px;height: 92px;text-align: center;color: #B8B8B8;font-weight: bold;display: inline-block;margin: 5px;}
+			.mui-input-group:before{background-color: white;}
+			mui-input-group:before{height: 0px;}
+			.color-blue{color: #12B6F6 !important;}
+			.btn-blue{background-color: #12B6F6;color: white;padding:6px 10px;border-radius: 6px;border: 0px;}
+			.mui-table-view.u:after{
+				width: 96%;
+				margin-left: 4%;
+			}
+			.mui-table-view.u:before{
+				width: 96%;
+				margin-left: 4%;
+			}
+			.mui-table-view.n:after{
+				width: 0%;
+				margin-left: 4%;
+			}
+			.mui-table-view.n:before{
+				width: 0%;
+				margin-left: 4%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left color-blue"></a>
+			<h1 class="mui-title color-blue">走访录入</h1>
+		</header>
+		<div class="mui-content mui-content-padded" style="margin-bottom:20px;">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label  class="mui-pull-left" style="width: 40%;"><p1 style="color: red;">*</p1>&nbsp;慰问对象</label>
+					<input id="povertyPeopleName" type="text" class="mui-pull-right mui-input" style="width: 60%;"/>
+				</div>
+				<ul class="mui-table-view mui-table-view-chevron u">
+					<li class="mui-table-view-cell">
+						<label class="mui-pull-left" style="width: 40%;"><p1 style="color: red;">*</p1>&nbsp;出生年月</label>
+						<p id="birthday" class="mui-pull-right">请选择</p>
+					</li>
+					<li class="mui-table-view-cell" id="forcountryPicker">
+						<label class="mui-pull-left" style="width: 40%;"><p1 style="color: red;">*</p1>&nbsp;所属村居</label>
+						<input id="villageId" type="text" class="mui-input mui-hidden"/>
+						<p id="vilHandle" class="mui-pull-right">请选择</p>
+					</li>
+				</ul>
+				<div class="mui-input-row">
+					<label class="mui-pull-left" style="width: 40%;"><p1 style="color: red;">*</p1>&nbsp;家庭情况</label>
+					<input id="familyDetail" type="text" class="mui-pull-right mui-input" style="width: 60%;" placeholder="请填写家庭情况"/>
+				</div>
+				<ul class="mui-table-view mui-table-view-chevron u">
+					<li class="mui-table-view-cell" id="timePicker">
+						<label class="mui-pull-left" style="width: 40%;"><p1 style="color: red;">*</p1>&nbsp;慰问日期</label>
+						<input id="visitDate" type="text" class="mui-input mui-hidden"/>
+						<p id="visHandle" class="mui-pull-right">请选择</p>
+					</li>
+				</ul>
+				<div class="mui-input-row">
+					<label class="mui-pull-left" style="width: 40%;"><p1 style="color: red;">*</p1>&nbsp;走访人</label>
+					<input id="visitorName" type="text" class="mui-pull-right mui-input" style="width: 60%;" placeholder="请填写走访人"/>
+				</div>
+				<div class="mui-input-row">
+					<label class="mui-pull-left" style="width: 40%;"><p1 style="color: red;">*</p1>&nbsp;慰问物品</label>
+					<input id="visitGoods" type="text" class="mui-pull-right mui-input" style="width: 60%;" placeholder="请填写慰问物品"/>
+				</div>
+				<div class="mui-input-row">
+					<label class="mui-pull-left" style="width: 40%;"><p1 style="color: red;">*</p1>&nbsp;群众诉求</label>
+					<input id="massAppeal" type="text" class="mui-pull-right mui-input" style="width: 60%;" placeholder="请填写群众诉求"/>
+				</div>
+				<p style="margin-bottom: -2px;">慰问图片</p>
+				<div class="mui-input-row" style="background-color: white;padding-bottom: 100px">
+					<form action="" method= "post" id="uploadForm">
+						<div id="files" style="display: inline-block;margin: 5px 0px;float:left;"></div>
+					</form>
+					<a id="addBtn" class="myBtn mui-icon mui-icon-plusempty">
+						<input id="addImageBtn" type="file" accept="image/*" onchange="selectFileImage(this)"  style="display:none;"/>
+						<canvas id="myCanvas" style="display: none" ></canvas>
+						<img src="" alt="" id="ago" style="display: none"/>
+					</a>
+				</div>
+				<ul class="mui-table-view n">
+					<div class="mui-card">
+						<li class="mui-table-view-cell mui-collapse">
+							<a class="mui-navigate-right" href="#">慰问详情</a>
+							<div class="mui-collapse-content">
+								<div class="mui-input-row" style="margin-top: 5px;">
+									<p style="margin-bottom: -2px;">慰问情况</p>
+									<textarea id="condolenceDetail" rows="4" placeholder="请填写慰问情况" class="mui-input-speech mui-input-clear"></textarea>
+								</div>
+								<div class="mui-input-row">
+									<p style="margin-bottom: -2px;">备注</p>
+									<textarea id="comments" rows="2" placeholder="请填写备注" class="mui-input-speech mui-input-clear"></textarea>
+								</div>
+							</div>
+						</li>
+					</div>
+				</ul>
+				<div class="mui-content" style="margin-top: -10px;">
+					<div class="mui-card">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell mui-collapse">
+								<a class="mui-navigate-right" href="#">心愿</a>
+								<div class="mui-collapse-content">
+									<form class="mui-input-group">
+										<div class="mui-input-row">
+											<label>心愿标题</label>
+											<input id="wishTitle" type="text" class="mui-input-clear" placeholder="请输入心愿标题">
+										</div>
+										<div class="mui-input-row" style="height: 15px;">
+										</div>
+									</form>
+									<div class="mui-input-row">
+										<p style="margin-bottom: -2px;">心愿内容</p>
+										<textarea id="wishContent" rows="2" class="mui-input-speech mui-input-clear" placeholder="请填写心愿内容"></textarea>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<button id="submitBtn" class="mui-btn mui-btn-block btn-blue" style="margin-top: 20px;">提交</button>
+			</form>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/mui.picker.all.js"></script>
+	<script src="../js/exif.js" ></script>
+	<script src="../js/mobileBUGFix.mini.js"></script>
+	<script src="../js/mui.zoom.js"></script>
+	<script src="../js/mui.previewimage.js"></script>
+	<script src="../js/mui.mask.js"></script>
+	<script src="../js/jquery2.min.js"></script>
+	<script src="../js/app.js"></script>
+	<script src="../js/appajax.js"></script>
+	<script type="text/javascript">
+		//本地缓存
+		var state = app.getUserState();
+		var povertyPeopleId = localStorage.getItem("pid");
+		var povertyPeopleName = localStorage.getItem("povertyName");
+		var birthday = localStorage.getItem("birthday");
+		var villageId = localStorage.getItem("villageId");
+		var familyDetail = localStorage.getItem("familyDetail");
+		mui.init();
+		mui.ready(function() {
+			DataInit();
+			gbid('timePicker').addEventListener('tap', function(event) {
+				timePicker.show(function(items) {
+					var visitDate=parseDate(items.toString());
+					$("#visitDate").val(visitDate);
+					if(items != null) {;
+						$("#visHandle").addClass("mui-navigate-right");
+						$("#visHandle").removeClass("mui-pull-right");
+					}
+					gbid("visHandle").innerHTML=items;
+				});
+			});
+			gbid('forcountryPicker').addEventListener('tap', function(event) {
+				forcountryPicker.show(function(items) {
+					var village=items[0].value;
+					$("#villageId").val(items[0].id);
+					if(village == "") {
+					    $("#vilHandle").removeClass("mui-navigate-right");
+					    $("#vilHandle").addClass("mui-pull-right");
+					}else {
+					    $("#vilHandle").addClass("mui-navigate-right");
+					    $("#vilHandle").removeClass("mui-pull-right");
+					}
+					$("#vilHandle").html(items[0].text);
+				});
+			});
+
+			gbid('submitBtn').addEventListener('tap', function(event) {
+				mui.showLoading("正在校验中...","");
+				setTimeout(function(){
+					submitFun();
+				},100);
+			});
+		});
+		
+		//数据初始化
+		var timePicker = new mui.DtPicker({"type":"date","beginYear":new Date().getFullYear()-100,"endYear":new Date().getFullYear()});
+		var forcountryPicker = new mui.PopPicker();
+		var pickerInitData = [{id:"",text:"请选择",value:""}];
+		var villageData = [];
+		function DataInit() {
+			$("#povertyPeopleName").val(povertyPeopleName);
+			$("#birthday").html(birthday);
+			$("#birthday").removeClass("mui-pull-right");
+			$("#familyDetail").val(familyDetail);
+			var data = {baseVillageIds:state.villageIds,baseDeptIds:state.deptIds};
+			appajax.SendRequestByPost("base/selectInitData",JSON.stringify(data),function (response) {
+				if("0000" == response.code) {
+					var rtnData = response.result;
+					var villages = rtnData.villages;
+					villageData = villages.length>0?villages:pickerInitData;
+					forcountryPicker.setData(villageData);
+					$("#villageId").val(villageId);
+					$("#vilHandle").html(getDictJsonText(villageData, villageId));
+					$("#vilHandle").removeClass("mui-pull-right");
+				}
+			},function(response) {
+				mui.toast("初始化数据失败！");
+			},false);
+		}
+		
+		var image1 = "";
+		var image2 = "";
+		var image3 = "";
+		var imageMin = "";
+		function submitFun() {
+			//给图片设置值
+			setImage();
+			var wish = {povertyPeopleId:povertyPeopleId,
+				wishTitle:$("#wishTitle").val(),
+				wishContent:$("#wishContent").val(),
+				wishCreateDate:$("#visitDate").val(),
+				wishStatus:"0"
+				};
+			var data = {
+				povertyPeopleId:povertyPeopleId,
+				birthday:birthday,
+				villageId:$("#villageId").val(),
+				visitDate:$("#visitDate").val(),
+				familyDetail:gbid('familyDetail').value,
+			    visitorName:gbid('visitorName').value,
+				visitGoods:gbid("visitGoods").value,
+				massAppeal:gbid('massAppeal').value,
+			    visitDetail:gbid('condolenceDetail').value,
+				comments:gbid('comments').value,
+				isDelete:"n",
+				image1:image1,image2:image2,image3:image3,
+				imageMin:imageMin,
+				tBussWishVO : wish
+			};
+			
+			if(!checkIsEmpty(data)) {
+				mui.hideLoading();
+				return;
+			}
+			//将提交按钮置灰
+			$("#submitBtn").attr('disabled',true);
+			mui.showLoading("正在保存中...","");
+			appajax.SendRequestByPost("/visit/save",JSON.stringify(data),function (response) {
+				mui.hideLoading();
+				if(response.code == "0000") {
+					setTimeout(function(){
+						mui.toast("走访录入成功");
+						openUrl("visitorlist_brow.html");
+					},500);
+				}else {
+					$("#submitBtn").attr('disabled',false);
+					mui.toast("走访户录入失败！");
+				}
+			},function(response) {
+				mui.hideLoading();
+				$("#submitBtn").attr('disabled',false);
+				mui.toast("走访户录入失败！");
+			});
+		}
+		
+		function checkIsEmpty(data) {
+			if(data.condolenceDate == "") {
+				mui.toast("慰问日期不能为空！");
+				return false;
+			}
+			if(data.familyDetail == "") {
+				mui.toast("家庭情况不能为空！");
+				return false;
+			}
+			if(data.visitorName == "") {
+				mui.toast("走访人姓名不能为空！");
+				return false;
+			}
+			if(!checkText(data.visitorName)) {
+				return false;
+			}
+			
+			if(data.condolenceProduct == "") {
+				mui.toast("慰问物品不能为空！");
+				return false;
+			}
+			if(data.massAppeal == "") {
+				mui.toast("群众诉求不能为空！");
+				return false;
+			}
+			var wish = data.tBussWishVO;
+			if(wish.wishTitle !="" && wish.wishContent == "") {
+				mui.toast("心愿必须全部填写！");
+				return false;
+			} 
+			if(wish.wishContent !="" && wish.wishTitle == "") {
+				mui.toast("心愿必须全部填写！");
+				return false;
+			}
+			return true;
+		}
+		
+		function setImage() {
+			console.log("开始设置图片");
+			for(var i=0;i<files.length;i++) {
+				if(files[i].key == 'image1') {
+					image1 = files[i].value;
+				}
+				if(files[i].key == 'image2') {
+					image2 = files[i].value;
+				}
+				if(files[i].key == 'image2') {
+					image2 = files[i].value;
+				}
+			}
+			//设置缩略图的值
+			if(fileBase.length>0) {
+				var min = fileBase[0].value;
+				imageMin = min.split(",")[1];
+			}
+		}
+		
+		//初始化数据设置
+		function plusReady(){
+
+			forcountryPicker.setData(forcountryData);
+
+			gbid('timePicker').addEventListener('tap', function(event) {
+				timePicker.show(function(items) {
+					condolenceDate=parseDate(items.toString());
+					gbid("condolenceDate").innerHTML=items;
+				});
+			});
+			gbid('forcountryPicker').addEventListener('tap', function(event) {
+				forcountryPicker.show(function(items) {
+					village=items[0].value;
+					gbid("village").innerHTML=items[0].text;
+				});
+			});
+
+			gbid('submitBtn').addEventListener('tap', function(event) {
+
+			});
+
+		}
+
+		var files=[];   
+		var fileBase = [];
+		function selectFileImage(fileObj) {
+		    var file = fileObj.files['0'];
+		    var Orientation = null;
+		    if (file) {
+		        console.log("正在上传,请稍后...");
+		        var rFilter = /^(image\/jpeg|image\/png)$/i; // 检查图片格式
+		        if (!rFilter.test(file.type)) {
+		            return;
+		        }
+				//压缩略图
+				setFileImage(file);
+		        //获取照片方向角属性，用户旋转控制
+		        EXIF.getData(file, function() {
+		            EXIF.getAllTags(this);
+		            Orientation = EXIF.getTag(this, 'Orientation');
+		        });
+		        var oReader = new FileReader();
+		        oReader.onload = function(e) {
+		            //var blob = URL.createObjectURL(file);
+		            //_compress(blob, file, basePath);
+		            var image = new Image();
+		            image.src = e.target.result;
+		            image.onload = function() {
+		                var expectWidth = this.naturalWidth;
+		                var expectHeight = this.naturalHeight;
+		
+		                if (this.naturalWidth > this.naturalHeight && this.naturalWidth > 400) {
+		                    expectWidth = 400;
+		                    expectHeight = expectWidth * this.naturalHeight / this.naturalWidth;
+		                } else if (this.naturalHeight > this.naturalWidth && this.naturalHeight > 600) {
+		                    expectHeight = 600;
+		                    expectWidth = expectHeight * this.naturalWidth / this.naturalHeight;
+		                }
+						//缩略图:2/3
+		                var canvas = document.createElement("canvas");
+		                var ctx = canvas.getContext("2d");
+		                canvas.width = expectWidth;
+		                canvas.height = expectHeight;
+		                ctx.drawImage(this, 0, 0, expectWidth, expectHeight);
+		
+		                var base64 = null;
+		                var mpImg = new MegaPixImage(image);
+		                mpImg.render(canvas, {
+		                    maxWidth: 400,
+		                    maxHeight: 600,
+		                    quality: 0.3,
+		                    orientation: Orientation
+		                });
+		                base64 = canvas.toDataURL("image/png", 0.3);
+						console.log("正常压缩图片："+base64);
+						var zz = {key:"image"+index,value:base64};
+		                appendFile(zz);
+		            };
+		        };
+		        oReader.readAsDataURL(file);
+		    }
+		    fileObj.value = "";
+		}
+		
+		//删除图片
+		function removeFile(div,p){
+			$("#addBtn").show();
+			gbid("files").removeChild(div);
+			index--;
+			for (var i=0;i<files.length;i++) {
+				if(files[i].key==p){
+					files.splice(i,1);
+					break;
+				}
+			}
+			for(var j=0;j<fileBase.length;j++) {
+				if(fileBase[j].key == p) {
+					fileBase.splice(j,1);
+					break;
+				}
+			}
+		}
+		
+		// 添加文件
+		var index=1;
+		var maxlength=3;
+		function appendFile(p){
+			var fe=document.getElementById("files");
+			var div=document.createElement("div");
+			var img=document.createElement("img");
+			var btn=document.createElement("span");
+			img.setAttribute("data-preview-src","");
+			div.setAttribute("style","display: inline-block;");
+			img.setAttribute("style","height: 90px;width: 90px;margin-left: 5px;");
+			img.setAttribute("src",p.value);
+			btn.setAttribute("class","mui-icon mui-icon-close-filled");
+			btn.setAttribute("style","position: relative;bottom: 70px;right:25px;margin-right: -20px;");
+			btn.onclick=function(){removeFile(div,p.key)};
+			div.appendChild(img);
+			div.appendChild(btn);
+			fe.appendChild(div);
+			var val = p.value;
+			files.push({key:p.key,value:val.split(",")[1]});
+			index++;
+		}
+		
+		gbid('addBtn').addEventListener('tap', function(event) {
+			if(index>maxlength){
+				mui.toast("最多上传"+maxlength+"张图片");
+				return;
+			}
+		    $("#addImageBtn").click();
+		});
+		
+		//设置缩略图
+		function setFileImage(file) {
+			console.log("正在压缩缩略图,请稍后...");
+		    var Orientation = null;
+		    if (file) {
+		        console.log("正在压缩缩略图,请稍后...");
+		        var rFilter = /^(image\/jpeg|image\/png)$/i; // 检查图片格式
+		        if (!rFilter.test(file.type)) {
+		            return "";
+		        }
+		        //获取照片方向角属性，用户旋转控制
+		        EXIF.getData(file, function() {
+		            EXIF.getAllTags(this);
+		            Orientation = EXIF.getTag(this, 'Orientation');
+		        });
+		        var oReader = new FileReader();
+		        oReader.onload = function(e) {
+		            //var blob = URL.createObjectURL(file);
+		            //_compress(blob, file, basePath);
+		            var image = new Image();
+		            image.src = e.target.result;
+		            image.onload = function() {
+		                var expectWidth = this.naturalWidth;
+		                var expectHeight = this.naturalHeight;
+		
+		                if (this.naturalWidth > this.naturalHeight && this.naturalWidth > 400) {
+		                    expectWidth = 60;
+		                    expectHeight = expectWidth * this.naturalHeight / this.naturalWidth;
+		                } else if (this.naturalHeight > this.naturalWidth && this.naturalHeight > 600) {
+		                    expectHeight = 80;
+		                    expectWidth = expectHeight * this.naturalWidth / this.naturalHeight;
+		                }
+						//缩略图:60/80
+		                var canvas = document.createElement("canvas");
+		                var ctx = canvas.getContext("2d");
+		                canvas.width = expectWidth;
+		                canvas.height = expectHeight;
+		                ctx.drawImage(this, 0, 0, expectWidth, expectHeight);
+		
+		                var base64 = null;
+		                var mpImg = new MegaPixImage(image);
+		                mpImg.render(canvas, {
+		                    maxWidth: 60,
+		                    maxHeight: 80,
+		                    quality: 0.4,
+		                    orientation: Orientation
+		                });
+		                base64 = canvas.toDataURL("image/png", 0.4);
+						var zz = {key:"image"+index,value:base64};
+						fileBase.push(zz);
+		            };
+		        };
+		        oReader.readAsDataURL(file);
+		    }
+		}
+
+        
+
+	</script>
+
+</html>
